@@ -24,21 +24,25 @@ public class FilterTaskAuth extends OncePerRequestFilter{
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-                // Pegar a autenticação (usuario e senha)
-                var authorization = request.getHeader("Authorization");
+                var servletPath = request.getServletPath();
 
-                var authEncoded = authorization.substring("Basic".length()).trim();
+                if(servletPath.equals("/tasks/")) {
 
-                byte[] authDecode = Base64.getDecoder().decode(authEncoded);
+                    // Pegar a autenticação (usuario e senha)
+                    var authorization = request.getHeader("Authorization");
 
-                var authString = new String(authDecode);
+                    var authEncoded = authorization.substring("Basic".length()).trim();
 
-                // ["behnascimento", "12345"]
-                String[] credentials = authString.split(":");
-                String username = credentials[0];
-                String password = credentials[1];
+                    byte[] authDecode = Base64.getDecoder().decode(authEncoded);
 
-                // Validar usuário
+                    var authString = new String(authDecode);
+
+                    // ["behnascimento", "12345"]
+                    String[] credentials = authString.split(":");
+                    String username = credentials[0];
+                    String password = credentials[1];
+
+                    // Validar usuário
                     var user = this.userRepository.findByUsername(username);
                     if(user == null) {
                         response.sendError(401);
@@ -52,5 +56,8 @@ public class FilterTaskAuth extends OncePerRequestFilter{
                         }
                         // Segue viagem
                     }  
+                }else {
+                    filterChain.doFilter(request, response);
+                }
     }
 }
