@@ -1,0 +1,10 @@
+br\com\behnascimento\todolist\task\ITaskRepository.class
+br\com\behnascimento\todolist\user\IUserRepository.class
+br\com\behnascimento\todolist\utils\Utils.class
+br\com\behnascimento\todolist\task\TaskModel.class
+br\com\behnascimento\todolist\user\UserController.class
+br\com\behnascimento\todolist\TodolistApplication.class
+br\com\behnascimento\todolist\user\UserModel.class
+br\com\behnascimento\todolist\filter\FilterTaskAuth.class
+br\com\behnascimento\todolist\errors\ExceptionHandlerController.class
+br\com\behnascimento\todolist\task\TaskController.class
