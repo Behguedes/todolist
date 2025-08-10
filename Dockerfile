@@ -1,15 +1,17 @@
-# ---- Etapa de Build ----
-FROM maven:3.9.6-eclipse-temurin-17 AS build
-WORKDIR /app
-COPY pom.xml .
-RUN mvn dependency:go-offline
+FROM ubuntu:latest AS build
 
-COPY src ./src
-RUN mvn clean package -DskipTests
+RUN apt-get update
+RUN apt-get install openjdk-24-jdk -y
 
-# ---- Etapa de Execução ----
-FROM eclipse-temurin:17-jdk-jammy
-WORKDIR /app
-COPY --from=build /app/target/todolist-1.0.0.jar app.jar
+COPY . . 
+
+RUN apt-get install maven -y
+RUN mvn clean install
+
+FROM openjdk:24-jdk-slim
+
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+
+COPY --from=build /target/todolist-1.0.0.jar app.jar
+
+ENTRYPOINT [ "java", "-jar", "app.jar"]
